@@ -1,37 +1,16 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
-/**
- *
- * @author nine
- */
 package com.busbooking.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
-/**
- *
- * @author nine
- */
 public class DBConnection {
-    private static final String URL =
-        "jdbc:mysql://localhost:3306/busbooking"
-      + "?useSSL=false"
-      + "&allowPublicKeyRetrieval=true"
-      + "&serverTimezone=UTC";
 
-    // put your real MySQL credentials here:
-    private static final String USER = "root";
-    private static final String PASS = "admin";
+    // Default values if environment variables are not set
+    private static final String DEFAULT_URL =
+        "jdbc:mysql://localhost:3306/busbooking?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
+    private static final String DEFAULT_USER = "root";
+    private static final String DEFAULT_PASS = "admin";
 
     static {
         try {
@@ -42,6 +21,10 @@ public class DBConnection {
     }
 
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL, USER, PASS);
+        String url = System.getenv("DB_URL") != null ? System.getenv("DB_URL") : DEFAULT_URL;
+        String user = System.getenv("DB_USER") != null ? System.getenv("DB_USER") : DEFAULT_USER;
+        String pass = System.getenv("DB_PASS") != null ? System.getenv("DB_PASS") : DEFAULT_PASS;
+
+        return DriverManager.getConnection(url, user, pass);
     }
 }
